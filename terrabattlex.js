@@ -2,7 +2,7 @@
 // @name        metal zone
 // @namespace   https://github.com/babofitos/tbx-metalzone.git
 // @include     http://www.terrabattlex.com/
-// @version     1.2
+// @version     1.3
 // @grant       none
 // ==/UserScript==
 var days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
@@ -19,21 +19,14 @@ function checkScheduleLoad() {
 function main() {
   var tbody = document.querySelector('#metal_zone_schedule table tbody');
   var trs = tbody.children;
-  var tdNodes = [];
 
-  for (var i = 0; i < trs.length; i++) {
-    var tr = trs[i];
-    var tds = tr.children;
-    
-    for (var j = 1; j < tds.length; j++) {
-      var td = tds[j];
-
-      tdNodes.push(td);
-    };
-  };
-
-  tdNodes.forEach(setColor);
-}
+  [].map.call(trs, function(tr) {
+    return [].map.call([].slice.call(tr.children, 0), function(td) {
+      return td;
+    })
+  }).reduce(function(a, b) {
+    return a.concat(b)
+  }).forEach(setColor);
 
 function convertNumToDay(day) {
   return days[day];
@@ -79,5 +72,4 @@ function setColor(td) {
   } else if (zoneTime == nextTimeAndPeriod) {
     td.style.color = 'rgb(204, 204, 0)';
   }
-
 }
