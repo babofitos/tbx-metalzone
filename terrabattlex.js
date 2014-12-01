@@ -27,6 +27,7 @@ function main() {
   }).reduce(function(a, b) {
     return a.concat(b)
   }).forEach(setColor);
+}
 
 function convertNumToDay(day) {
   return days[day];
