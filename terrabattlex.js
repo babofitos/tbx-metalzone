@@ -2,7 +2,7 @@
 // @name        metal zone
 // @namespace   https://github.com/babofitos/tbx-metalzone.git
 // @include     http://www.terrabattlex.com/
-// @version     1.1
+// @version     1.2
 // @grant       none
 // ==/UserScript==
 var days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
@@ -51,39 +51,28 @@ function calcPeriod(hour) {
   }
 }
 
-function calcNextDay(dayIndex) {
-  dayIndex += 1;
-  
-  return dayIndex % days.length;
-}
-
-function isNextDay(hour) {
-  return hour === 0;
-}
-
-function calcNextHour(hour) {
-  hour += 1;
-  
-  return hour % 24;
-}
-
-function setColor(td) {
-  var html = td.innerHTML;
-  var zoneTime = html;
-  var date = new Date();
-
+function formatDayTime(date) {
   var hour = date.getHours();
   var current12Hour = convert12Hour(hour);
   var period = calcPeriod(hour);
   var day = convertNumToDay(date.getDay());
 
-  var nextHour = calcNextHour(hour);
-  var next12Hour = convert12Hour(nextHour);
-  var nextPeriod = calcPeriod(nextHour);
-  var nextDay = isNextDay(nextHour) ? convertNumToDay(calcNextDay(date.getDay())) : day;
-  
-  var timeAndPeriod = day + ', ' + current12Hour + period;
-  var nextTimeAndPeriod = nextDay + ', ' + next12Hour + nextPeriod;
+  return day + ', ' + current12Hour + period;
+}
+
+function calcNextDate(date) {
+  return new Date(date.getTime() + 3600000);
+}
+
+function setColor(td) {
+  var html = td.innerHTML;
+  var zoneTime = html;
+
+  var date = new Date();
+  var nextDate = calcNextDate(date);
+
+  var timeAndPeriod = formatDayTime(date);
+  var nextTimeAndPeriod = formatDayTime(nextDate);
 
   if (zoneTime == timeAndPeriod) {
     td.style.color = 'green';
